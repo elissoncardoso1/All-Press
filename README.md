@@ -6,18 +6,70 @@
 
 Sistema completo de gerenciamento de impressão de alta performance desenvolvido em C/C++ com APIs nativas. Projetado para gráficas rápidas que necessitam de máximo desempenho, robustez e controle granular sobre operações de impressão.
 
-## 🚀 Características Principais
+## 🚀 Início Rápido
 
-- **Motor de impressão nativo C++** com performance 10-50x superior ao Python
-- **Descoberta assíncrona de impressoras** com threading paralelo
-- **Processamento de arquivos** com streaming para documentos grandes
-- **Sistema de filas inteligente** com balanceamento de carga
-- **Color management nativo** com perfis ICC
-- **API REST C++** de alta performance
-- **WebSocket server nativo** para atualizações em tempo real
-- **Uso de memória 80-90% menor** que soluções Python
+### Instalação
 
-## 📋 Requisitos do Sistema
+```bash
+# Clone o repositório
+git clone https://github.com/elissoncardoso1/All-Press.git
+cd All-Press
+
+# Instalar e compilar
+./scripts/install.sh
+
+# Iniciar servidor
+cd build && ./all_press_server
+```
+
+### Uso Básico
+
+```bash
+# Listar impressoras
+curl http://localhost:8000/api/printers
+
+# Imprimir documento
+curl -X POST http://localhost:8000/api/jobs \
+  -F "file=@document.pdf" \
+  -F "printer_id=HP_LaserJet" \
+  -F 'options={"copies":2}'
+```
+
+## ✨ Características Principais
+
+- **Performance**: 10-50x mais rápido que soluções Python
+- **Memória**: 80-90% menos uso de memória
+- **Descoberta Automática**: CUPS, IPP, mDNS/Bonjour
+- **Multi-threading**: Processamento assíncrono e paralelo
+- **API REST**: Endpoints completos para integração
+- **WebSocket**: Atualizações em tempo real
+- **Suporte a Plotters**: HP, Canon, Epson (HPGL, PostScript)
+- **Interface Web**: React/TypeScript moderna e responsiva
+
+## 📚 Documentação
+
+📖 **[Documentação Completa](DOCUMENTACAO.md)** - Guia completo com todos os detalhes
+
+- [Arquitetura](ARCHITECTURE.md) - Estrutura e componentes do sistema
+- [API REST](docs/API.md) - Documentação da API
+- [Exemplos de Integração](INTEGRATION_EXAMPLES.md) - Node.js, Python, cURL
+- [Suporte a Plotters](docs/PLOTTER_SUPPORT.md) - Guia de uso de plotters
+- [Contribuindo](CONTRIBUTING.md) - Como contribuir para o projeto
+
+## 🏗️ Estrutura do Projeto
+
+```
+All-Press/
+├── src/              # Código-fonte C++
+├── include/          # Headers públicos
+├── frontend/         # Interface web React/TypeScript
+├── tests/            # Testes unitários
+├── config/           # Arquivos de configuração
+├── docs/             # Documentação técnica
+└── scripts/          # Scripts de build e instalação
+```
+
+## 🔧 Requisitos
 
 ### macOS
 ```bash
@@ -32,84 +84,7 @@ sudo apt-get install -y \
     libsqlite3-dev libcurl4-openssl-dev
 ```
 
-## 🔧 Compilação
-
-### 1. Clone o repositório
-```bash
-git clone <repo-url> all_press_cpp
-cd all_press_cpp
-```
-
-### 2. Instale dependências com Conan (opcional)
-```bash
-pip install conan
-conan profile detect --force
-mkdir build && cd build
-conan install .. --build=missing
-```
-
-### 3. Configure e compile
-```bash
-cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
-ninja
-```
-
-### 4. Execute
-```bash
-./all_press_server
-```
-
-## 📁 Estrutura do Projeto
-
-```
-all_press_cpp/
-├── src/
-│   ├── core/              # Engine principal
-│   │   ├── printer_manager.cpp
-│   │   ├── job_queue.cpp
-│   │   └── color_manager.cpp
-│   ├── network/           # Descoberta e comunicação
-│   │   ├── cups_client.cpp
-│   │   ├── ipp_client.cpp
-│   │   └── network_scanner.cpp
-│   ├── conversion/        # Processamento de arquivos
-│   │   ├── file_processor.cpp
-│   │   ├── pdf_processor.cpp
-│   │   └── image_processor.cpp
-│   ├── api/               # REST API & WebSocket
-│   │   ├── http_server.cpp
-│   │   └── websocket_server.cpp
-│   ├── database/          # Persistência SQLite
-│   │   └── sqlite_manager.cpp
-│   ├── utils/             # Utilitários
-│   │   ├── logger.cpp
-│   │   ├── config.cpp
-│   │   └── file_utils.cpp
-│   └── main.cpp           # Aplicação principal
-├── include/               # Headers públicos
-├── config/                # Arquivos de configuração
-├── tests/                 # Testes unitários
-└── CMakeLists.txt         # Build system
-```
-
-## 🎯 Uso
-
-### Iniciar o servidor
-```bash
-./all_press_server
-```
-
-### Com arquivo de configuração customizado
-```bash
-./all_press_server --config /path/to/config.conf
-```
-
-### Modo debug
-```bash
-./all_press_server --debug --port 8000
-```
-
-## 📊 Performance Esperada
+## 🚀 Performance
 
 | Operação | Python/FastAPI | C++ Nativo | Melhoria |
 |----------|---------------|------------|----------|
@@ -118,115 +93,54 @@ all_press_cpp/
 | Uso de memória base | 150-300 MB | 15-30 MB | **80-90%** |
 | Jobs simultâneos | 10-20/min | 50-100/min | **5x** |
 
-## 🔌 API REST
+## 🖨️ Suporte a Plotters
 
-### Descobrir impressoras
-```bash
-GET /api/printers
-```
+- **HP DesignJet**: T1200, T2300, T3500 (HPGL/HPGL2)
+- **Canon imagePROGRAF**: TX-3000, TX-4000, PRO-6000 (PostScript)
+- **Epson SureColor**: T5200, T7200, T7700 (PostScript)
 
-### Enviar job de impressão
-```bash
-POST /api/print
-{
-  "printer": "HP_LaserJet",
-  "file_path": "/tmp/document.pdf",
-  "options": {
-    "copies": 2,
-    "color_mode": "color",
-    "duplex": "long-edge"
-  }
-}
-```
+## 🌐 API REST
 
-### Status de jobs
-```bash
-GET /api/jobs
-GET /api/jobs/{job_id}
-```
+**Base URL**: `http://localhost:8000/api`
 
-## 🔧 Configuração
+Principais endpoints:
+- `GET /api/printers` - Listar impressoras
+- `POST /api/jobs` - Criar job de impressão
+- `GET /api/jobs/{id}` - Status do job
+- `GET /api/system/status` - Status do sistema
+- `GET /api/plotters/discover` - Descobrir plotters
 
-Edite `config/all_press.conf`:
+Veja a [documentação completa da API](docs/API.md) para mais detalhes.
 
-```ini
-[server]
-port=8000
-ws_port=8001
+## 🧪 Testes
 
-[queue]
-max_workers=4
-
-[printer]
-auto_discover=true
-monitor_interval=5
-
-[logging]
-level=INFO
-file=all_press.log
-```
-
-## 🛠️ Desenvolvimento
-
-### Executar testes
 ```bash
 cd build
-ninja test
+ctest --output-on-failure
 ```
 
-### Compilar com debug
+## 🐳 Docker
+
 ```bash
-cmake .. -DCMAKE_BUILD_TYPE=Debug
-ninja
-```
-
-### Gerar documentação
-```bash
-doxygen Doxyfile
-```
-
-## 🐛 Troubleshooting
-
-### CUPS não encontrado
-```bash
-# macOS
-brew install cups
-
-# Ubuntu
-sudo apt-get install libcups2-dev
-```
-
-### Erro de permissões
-```bash
-# Adicionar usuário ao grupo lpadmin
-sudo usermod -a -G lpadmin $USER
+docker-compose up -d
 ```
 
 ## 📝 Licença
 
-MIT License - veja LICENSE para detalhes
+MIT License - veja [LICENSE](LICENSE) para detalhes
 
 ## 👥 Contribuindo
 
-1. Fork o projeto
-2. Crie sua feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+Contribuições são bem-vindas! Veja [CONTRIBUTING.md](CONTRIBUTING.md) para diretrizes.
 
 ## 📞 Suporte
 
-- Issues: https://github.com/yourrepo/all_press_cpp/issues
-- Email: support@allpress.com
-
-## 🙏 Agradecimentos
-
-- CUPS - Common Unix Printing System
-- Boost C++ Libraries
-- SQLite
-- cpp-httplib
-- websocketpp
+- **Repositório**: https://github.com/elissoncardoso1/All-Press
+- **Issues**: GitHub Issues
+- **Documentação**: [DOCUMENTACAO.md](DOCUMENTACAO.md)
 
 ---
 
 **All Press C++** - Sistema de Impressão de Alto Desempenho
+
+*Desenvolvido com ❤️ em C++17*

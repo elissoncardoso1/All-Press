@@ -1,0 +1,47 @@
+# Guia de Limpeza de Arquivos .md
+
+## Arquivos Principais (MANTER)
+- README.md - Visão geral do projeto
+- DOCUMENTACAO.md - Documentação completa consolidada
+- ARCHITECTURE.md - Arquitetura do sistema
+- CHANGELOG.md - Histórico de versões
+- CONTRIBUTING.md - Guia de contribuição
+- QUICKSTART.md - Início rápido
+- INTEGRATION_EXAMPLES.md - Exemplos de integração
+
+## Arquivos de Documentação Técnica (MANTER)
+- docs/API.md - Documentação da API REST
+- docs/PLOTTER_SUPPORT.md - Suporte a plotters
+- docs/PLOTTER_QUICKSTART.md - Guia rápido de plotters
+- docs/MANUFACTURER_SPECS.md - Especificações dos fabricantes
+- docs/PLOTTER_INTEGRATION_EXAMPLES.md - Exemplos de integração de plotters
+
+## Arquivos Temporários (MOVER para docs/archive/)
+- CORRECOES_*.md - Correções temporárias já aplicadas
+- RESUMO_CORRECOES_FINAIS.md - Resumo temporário
+- REVISAO_COMPLETA.md - Revisão temporária
+- STATUS_APLICACAO.md - Status temporário
+- TESTE_*.md - Testes temporários
+- SOLUCAO_*.md - Soluções temporárias
+- VERIFICACAO_*.md - Verificações temporárias
+- IMPLEMENTACAO_CONCLUIDA.md - Status temporário
+- PROXIMOS_PASSOS.md - Próximos passos (já implementados)
+- PROJECT_SUMMARY.md - Resumo temporário
+- FRONTEND_COMPLETE.md - Status temporário
+- PLOTTER_IMPLEMENTATION_SUMMARY.md - Resumo temporário
+- PLOTTER_SUPPORT_IMPLEMENTATION.md - Implementação temporária
+- README_DEBUG.md - Debug temporário
+- all_press_interface_prompt.md - Prompt temporário
+- prompt.md - Prompt temporário
+- extensions.md - Extensões temporárias
+
+## Arquivos de Design (MANTER em design_update/)
+- design_update/files/*.md - Arquivos de design
+
+## Frontend (MANTER)
+- frontend/README.md - README do frontend
+- frontend/UI_ANALYSIS_REPORT.md - Análise de UI
+
+## Ação Recomendada
+Mover arquivos temporários para docs/archive/ para manter o repositório limpo,
+mas preservar histórico se necessário.
