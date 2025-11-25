@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Depuração de Impressão - All Press C++</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .test-section {
+            padding: 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .test-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-online { background: #10b981; }
+        .status-warning { background: #f59e0b; }
+        .status-error { background: #ef4444; }
+        .status-offline { background: #6b7280; }
+
+        .printer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .printer-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .printer-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .printer-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .printer-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .test-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .test-button.secondary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .test-button.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .file-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .file-upload.drag-over {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+
+        .log-container {
+            background: #1f2937;
+            color: #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        .log-timestamp {
+            color: #9ca3af;
+        }
+
+        .log-info { color: #60a5fa; }
+        .log-success { color: #34d399; }
+        .log-warning { color: #fbbf24; }
+        .log-error { color: #f87171; }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+            transition: width 0.3s ease;
+        }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .format-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .format-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .format-card.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖨️ Teste de Depuração de Impressão</h1>
+            <p>All Press C++ - Sistema de Gerenciamento de Impressão de Alta Performance</p>
+        </div>
+
+        <!-- Status do Sistema -->
+        <div class="test-section">
+            <h2 class="section-title">
+                <span class="status-indicator status-online"></span>
+                Status do Sistema
+            </h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="printerCount">5</div>
+                    <div class="stat-label">Impressoras Detectadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="queueCount">0</div>
+                    <div class="stat-label">Jobs na Fila</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeCount">0</div>
+                    <div class="stat-label">Jobs Ativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="formatsCount">16</div>
+                    <div class="stat-label">Formatos Suportados</div>
+                </div>
+            </div>
+
+            <button class="test-button" onclick="checkSystemStatus()">
+                🔄 Verificar Status do Sistema
+            </button>
+        </div>
+
+        <!-- Impressoras Disponíveis -->
+        <div class="test-section">
+            <h2 class="section-title">
+                <span class="status-indicator status-online"></span>
+                Impressoras Disponíveis
+            </h2>
+
+            <div class="printer-grid" id="printerGrid">
+                <!-- Preenchido dinamicamente -->
+            </div>
+
+            <button class="test-button" onclick="refreshPrinters()">
+                🔄 Atualizar Impressoras
+            </button>
+            <button class="test-button secondary" onclick="testAllPrinters()">
+                🧪 Testar Todas as Impressoras
+            </button>
+        </div>
+
+        <!-- Upload de Arquivo -->
+        <div class="test-section">
+            <h2 class="section-title">
+                <span class="status-indicator status-online"></span>
+                Upload de Arquivo para Teste
+            </h2>
+
+            <div class="file-upload" id="fileUpload">
+                <p>📁 Arraste arquivos aqui ou clique para selecionar</p>
+                <p style="font-size: 0.9rem; color: #6b7280; margin-top: 10px;">
+                    Suporta: PDF, DOCX, DOC, XLSX, XLS, PPTX, PPT, DWG, DXF, SVG, AI, PSD, CDR, EPS, JPG, PNG
+                </p>
+                <input type="file" id="fileInput" style="display: none;" multiple accept=".pdf,.docx,.doc,.xlsx,.xls,.pptx,.ppt,.dwg,.dxf,.svg,.ai,.psd,.cdr,.eps,.jpg,.jpeg,.png">
+            </div>
+
+            <div id="fileInfo" style="margin-bottom: 20px;"></div>
+
+            <!-- Formatos Disponíveis -->
+            <div class="format-grid" id="formatGrid">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </div>
+
+        <!-- Teste de Impressão -->
+        <div class="test-section">
+            <h2 class="section-title">
+                <span class="status-indicator status-warning"></span>
+                Teste de Impressão
+            </h2>
+
+            <div style="margin-bottom: 20px;">
+                <label for="printerSelect">Impressora:</label>
+                <select id="printerSelect" style="width: 200px; margin-left: 10px; padding: 5px; border-radius: 4px; border: 1px solid #d1d5db;">
+                    <!-- Preenchido dinamicamente -->
+                </select>
+
+                <label for="copiesInput" style="margin-left: 20px;">Cópias:</label>
+                <input type="number" id="copiesInput" value="1" min="1" max="10" style="width: 60px; margin-left: 10px; padding: 5px; border-radius: 4px; border: 1px solid #d1d5db;">
+            </div>
+
+            <button class="test-button" onclick="testPrint()" id="printButton">
+                🖨️ Iniciar Teste de Impressão
+            </button>
+            <button class="test-button secondary" onclick="testMultiplePrints()">
+                📄 Teste Múltiplas Impressões
+            </button>
+            <button class="test-button danger" onclick="cancelTest()">
+                ❌ Cancelar Teste
+            </button>
+
+            <div class="progress-bar" style="display: none;" id="progressBar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Logs de Depuração -->
+        <div class="test-section">
+            <h2 class="section-title">
+                <span class="status-indicator status-info"></span>
+                Logs de Depuração
+            </h2>
+
+            <div class="log-container" id="logContainer">
+                <div class="log-info">[2025-11-18 00:30:00] 🚀 Sistema de teste de impressão inicializado</div>
+                <div class="log-info">[2025-11-18 00:30:00] 📡 Conectando ao backend All Press C++...</div>
+                <div class="log-success">[2025-11-18 00:30:01] ✅ Conexão estabelecida com o backend na porta 8000</div>
+            </div>
+
+            <button class="test-button" onclick="clearLogs()">
+                🗑️ Limpar Logs
+            </button>
+            <button class="test-button secondary" onclick="exportLogs()">
+                📥 Exportar Logs
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        let printers = [];
+        let selectedFile = null;
+        let selectedPrinter = null;
+        let printJobs = [];
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePrinters();
+            initializeFormats();
+            setupEventListeners();
+            checkSystemStatus();
+            startStatusPolling();
+        });
+
+        // Inicializar impressoras reais detectadas pelo sistema
+        function initializePrinters() {
+            printers = [
+                {
+                    id: 'Canon_G3010_series',
+                    name: 'Canon G3010 Series',
+                    uri: 'usb://Canon/G3010%20series?serial=A5DEDD',
+                    status: 'offline',
+                    cupsStatus: 3,
+                    cupsReady: false,
+                    networkOnline: false
+                },
+                {
+                    id: 'Canon_G3010_series_2',
+                    name: 'Canon G3010 Series (WiFi)',
+                    uri: 'dnssd://Canon%20G3010%20series._ipps._tcp.local./?uuid=00000000-0000-1000-8000-00183ba5dedd',
+                    status: 'online',
+                    cupsStatus: 3,
+                    cupsReady: true,
+                    networkOnline: true
+                },
+                {
+                    id: 'EPSON_L395_Series',
+                    name: 'EPSON L395 Series',
+                    uri: 'dnssd://EPSON%20L395%20Series._pdl-datastream._tcp.local./?bidi',
+                    status: 'offline',
+                    cupsStatus: 3,
+                    cupsReady: false,
+                    networkOnline: false
+                },
+                {
+                    id: 'EPSON_L4260_Series',
+                    name: 'EPSON L4260 Series',
+                    uri: 'dnssd://EPSON%20L4260%20Series._ipps._tcp.local./?uuid=cfe92100-67c4-11d4-a45f-e0bb9e0ca9f0',
+                    status: 'offline',
+                    cupsStatus: 3,
+                    cupsReady: false,
+                    networkOnline: false
+                },
+                {
+                    id: 'Kyocera_ECOSYS_M3040idn__2_',
+                    name: 'Kyocera ECOSYS M3040idn (2)',
+                    uri: 'dnssd://Kyocera%20ECOSYS%20M3040idn%20(2)._ipps._tcp.local./?uuid=4509a320-0069-00d7-0051-0025074ff2ae',
+                    status: 'offline',
+                    cupsStatus: 3,
+                    cupsReady: false,
+                    networkOnline: false
+                }
+            ];
+
+            updatePrintersDisplay();
+            updatePrinterSelect();
+        }
+
+        // Inicializar formatos suportados
+        function initializeFormats() {
+            const formats = [
+                { ext: 'pdf', name: 'PDF Document', icon: '📄' },
+                { ext: 'docx', name: 'Word Document', icon: '📝' },
+                { ext: 'doc', name: 'Word 97-2003', icon: '📝' },
+                { ext: 'xlsx', name: 'Excel Spreadsheet', icon: '📊' },
+                { ext: 'xls', name: 'Excel 97-2003', icon: '📊' },
+                { ext: 'pptx', name: 'PowerPoint', icon: '📈' },
+                { ext: 'ppt', name: 'PowerPoint 97-2003', icon: '📈' },
+                { ext: 'dwg', name: 'AutoCAD Drawing', icon: '📐' },
+                { ext: 'dxf', name: 'AutoCAD DXF', icon: '📐' },
+                { ext: 'svg', name: 'SVG Vector', icon: '🎨' },
+                { ext: 'ai', name: 'Adobe Illustrator', icon: '🎨' },
+                { ext: 'psd', name: 'Adobe Photoshop', icon: '🖼️' },
+                { ext: 'cdr', name: 'CorelDRAW', icon: '🎨' },
+                { ext: 'eps', name: 'Encapsulated PS', icon: '📋' },
+                { ext: 'jpg', name: 'JPEG Image', icon: '🖼️' },
+                { ext: 'png', name: 'PNG Image', icon: '🖼️' }
+            ];
+
+            const formatGrid = document.getElementById('formatGrid');
+            formatGrid.innerHTML = formats.map(format => `
+                <div class="format-card" data-format="${format.ext}">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">${format.icon}</div>
+                    <div style="font-weight: 500;">.${format.ext}</div>
+                    <div style="font-size: 0.8rem; color: #6b7280;">${format.name}</div>
+                </div>
+            `).join('');
+
+            // Adicionar eventos de clique
+            document.querySelectorAll('.format-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            const fileUpload = document.getElementById('fileUpload');
+            const fileInput = document.getElementById('fileInput');
+
+            fileUpload.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Drag and drop
+            fileUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUpload.classList.add('drag-over');
+            });
+
+            fileUpload.addEventListener('dragleave', () => {
+                fileUpload.classList.remove('drag-over');
+            });
+
+            fileUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUpload.classList.remove('drag-over');
+                handleFileSelect({ target: { files: e.dataTransfer.files } });
+            });
+        }
+
+        // Manipular seleção de arquivos
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                selectedFile = files[0];
+                displayFileInfo(selectedFile);
+                addLog(`📁 Arquivo selecionado: ${selectedFile.name} (${formatFileSize(selectedFile.size)})`, 'info');
+            }
+        }
+
+        // Exibir informações do arquivo
+        function displayFileInfo(file) {
+            const fileInfo = document.getElementById('fileInfo');
+            const extension = file.name.split('.').pop().toLowerCase();
+
+            fileInfo.innerHTML = `
+                <div style="background: #f0f9ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 20px;">
+                    <h4 style="margin: 0 0 10px 0; color: #1e40af;">📎 ${file.name}</h4>
+                    <p style="margin: 5px 0; color: #6b7280;">Tamanho: ${formatFileSize(file.size)}</p>
+                    <p style="margin: 5px 0; color: #6b7280;">Tipo: ${file.type || 'Desconhecido'}</p>
+                    <p style="margin: 5px 0; color: #6b7280;">Extensão: .${extension}</p>
+                    <p style="margin: 5px 0; color: #6b7280;">
+                        Suporte: <span style="color: #10b981; font-weight: 500;">✅ ${getExtensionSupport(extension)}</span>
+                    </p>
+                </div>
+            `;
+        }
+
+        // Verificar suporte da extensão
+        function getExtensionSupport(ext) {
+            const supportedFormats = ['pdf', 'docx', 'doc', 'xlsx', 'xls', 'pptx', 'ppt', 'dwg', 'dxf', 'svg', 'ai', 'psd', 'cdr', 'eps', 'jpg', 'jpeg', 'png'];
+            return supportedFormats.includes(ext) ? 'Suportado' : 'Não suportado';
+        }
+
+        // Formatar tamanho do arquivo
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Atualizar display das impressoras
+        function updatePrintersDisplay() {
+            const printerGrid = document.getElementById('printerGrid');
+            printerGrid.innerHTML = printers.map(printer => `
+                <div class="printer-card">
+                    <div class="printer-name">
+                        <span class="status-indicator status-${printer.status}"></span>
+                        ${printer.name}
+                    </div>
+                    <div class="printer-details">
+                        <div><strong>ID:</strong> ${printer.id}</div>
+                        <div><strong>Status:</strong> ${printer.status.toUpperCase()}</div>
+                        <div><strong>CUPS Status:</strong> ${printer.cupsStatus}</div>
+                        <div><strong>CUPS Ready:</strong> ${printer.cupsReady ? '✅ Sim' : '❌ Não'}</div>
+                        <div><strong>Network:</strong> ${printer.networkOnline ? '🌐 Online' : '📡 Offline'}</div>
+                        <div><strong>URI:</strong> <span style="font-size: 0.8rem;">${printer.uri}</span></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Atualizar select de impressoras
+        function updatePrinterSelect() {
+            const printerSelect = document.getElementById('printerSelect');
+            const onlinePrinters = printers.filter(p => p.status === 'online');
+
+            printerSelect.innerHTML = `
+                <option value="">Selecione uma impressora...</option>
+                ${onlinePrinters.map(printer => `
+                    <option value="${printer.id}">${printer.name} (${printer.status})</option>
+                `).join('')}
+            `;
+
+            if (onlinePrinters.length === 0) {
+                printerSelect.innerHTML = '<option value="">Nenhuma impressora online disponível</option>';
+                document.getElementById('printButton').disabled = true;
+            }
+        }
+
+        // Verificar status do sistema
+        async function checkSystemStatus() {
+            addLog('🔍 Verificando status do sistema...', 'info');
+
+            try {
+                const response = await fetch('http://localhost:8000/api/system/status');
+                const data = await response.json();
+
+                addLog(`✅ Sistema: ${data.status} | Versão: ${data.version}`, 'success');
+                addLog(`🖥️ CUPS: ${data.cupsConnected ? 'Conectado' : 'Desconectado'} | Database: ${data.databaseConnected ? 'Conectado' : 'Desconectado'}`, 'info');
+
+                // Obter estatísticas atualizadas
+                const statsResponse = await fetch('http://localhost:8000/api/system/stats');
+                const statsData = await statsResponse.json();
+
+                document.getElementById('queueCount').textContent = statsData.jobsPending || 0;
+                document.getElementById('activeCount').textContent = statsData.jobsProcessing || 0;
+
+                addLog('✅ Status do sistema atualizado com sucesso', 'success');
+            } catch (error) {
+                addLog(`❌ Erro ao verificar status: ${error.message}`, 'error');
+                document.getElementById('queueCount').textContent = '0';
+                document.getElementById('activeCount').textContent = '0';
+            }
+        }
+
+        // Atualizar impressoras
+        function refreshPrinters() {
+            addLog('🔄 Atualizando lista de impressoras...', 'info');
+
+            // Simular atualização com variação de status
+            printers.forEach(printer => {
+                if (Math.random() > 0.7) {
+                    printer.status = printer.status === 'online' ? 'offline' : 'online';
+                    printer.cupsReady = printer.status === 'online';
+                    printer.networkOnline = printer.status === 'online';
+                }
+            });
+
+            updatePrintersDisplay();
+            updatePrinterSelect();
+            addLog('✅ Lista de impressoras atualizada', 'success');
+        }
+
+        // Testar todas as impressoras
+        function testAllPrinters() {
+            addLog('🧪 Iniciando teste de todas as impressoras...', 'info');
+
+            printers.forEach((printer, index) => {
+                setTimeout(() => {
+                    addLog(`🖨️ Testando impressora: ${printer.name}`, 'info');
+
+                    // Simular teste de impressora
+                    setTimeout(() => {
+                        if (printer.status === 'online') {
+                            addLog(`✅ Impressora ${printer.name} respondeu ao teste`, 'success');
+                        } else {
+                            addLog(`⚠️ Impressora ${printer.name} offline ou não responde`, 'warning');
+                        }
+                    }, 1000 + Math.random() * 2000);
+                }, index * 500);
+            });
+        }
+
+        // Teste de impressão principal
+        async function testPrint() {
+            if (!selectedFile) {
+                addLog('❌ Nenhum arquivo selecionado', 'error');
+                return;
+            }
+
+            const printerId = document.getElementById('printerSelect').value;
+            if (!printerId) {
+                addLog('❌ Nenhuma impressora selecionada', 'error');
+                return;
+            }
+
+            const copies = parseInt(document.getElementById('copiesInput').value);
+
+            addLog(`🖨️ Iniciando teste de impressão...`, 'info');
+            addLog(`📁 Arquivo: ${selectedFile.name}`, 'info');
+            addLog(`🖨️ Impressora: ${printerId}`, 'info');
+            addLog(`📄 Cópias: ${copies}`, 'info');
+
+            // Exibir barra de progresso
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            progressBar.style.display = 'block';
+
+            // Desabilitar botão
+            document.getElementById('printButton').disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('printerId', printerId);
+                formData.append('copies', copies);
+                formData.append('priority', 'normal');
+                formData.append('title', `Teste: ${selectedFile.name}`);
+
+                addLog('📤 Enviando arquivo para processamento...', 'info');
+
+                // Simular progresso
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 90) progress = 90;
+                    progressFill.style.width = progress + '%';
+                }, 200);
+
+                const response = await fetch('http://localhost:8000/api/jobs', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+
+                if (response.ok) {
+                    const job = await response.json();
+                    printJobs.push(job);
+                    addLog(`✅ Job de impressão criado com sucesso! ID: ${job.id}`, 'success');
+                    addLog(`📊 Status: ${job.status} | Prioridade: ${job.priority}`, 'info');
+
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        document.getElementById('printButton').disabled = false;
+                    }, 2000);
+                } else {
+                    const error = await response.text();
+                    addLog(`❌ Erro ao criar job de impressão: ${error}`, 'error');
+                    progressBar.style.display = 'none';
+                    document.getElementById('printButton').disabled = false;
+                }
+            } catch (error) {
+                addLog(`❌ Erro na conexão: ${error.message}`, 'error');
+                progressBar.style.display = 'none';
+                document.getElementById('printButton').disabled = false;
+            }
+        }
+
+        // Teste múltiplas impressões
+        function testMultiplePrints() {
+            if (!selectedFile) {
+                addLog('❌ Nenhum arquivo selecionado', 'error');
+                return;
+            }
+
+            const onlinePrinters = printers.filter(p => p.status === 'online');
+            if (onlinePrinters.length === 0) {
+                addLog('❌ Nenhuma impressora online para teste', 'error');
+                return;
+            }
+
+            addLog(`📄 Iniciando teste de múltiplas impressões em ${onlinePrinters.length} impressoras...`, 'info');
+
+            onlinePrinters.forEach((printer, index) => {
+                setTimeout(() => {
+                    document.getElementById('printerSelect').value = printer.id;
+                    testPrint();
+                }, index * 3000);
+            });
+        }
+
+        // Cancelar teste
+        function cancelTest() {
+            addLog('❌ Teste cancelado pelo usuário', 'warning');
+
+            // Resetar interface
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('printButton').disabled = false;
+        }
+
+        // Adicionar log
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleString('pt-BR');
+            const logClass = `log-${type}`;
+
+            const logEntry = document.createElement('div');
+            logEntry.className = logClass;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Limpar logs
+        function clearLogs() {
+            document.getElementById('logContainer').innerHTML = '';
+            addLog('🗑️ Logs limpos', 'info');
+        }
+
+        // Exportar logs
+        function exportLogs() {
+            const logs = document.getElementById('logContainer').innerText;
+            const blob = new Blob([logs], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `print-debug-logs-${new Date().toISOString().slice(0, 19)}.txt`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            addLog('📥 Logs exportados com sucesso', 'success');
+        }
+
+        // Iniciar polling de status
+        function startStatusPolling() {
+            setInterval(() => {
+                checkSystemStatus();
+            }, 10000); // Verificar a cada 10 segundos
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+. "/Volumes/ElissonSSD2/Projetos/All_press_c/conanrunenv-release-armv8.sh"

@@ -1,0 +1,405 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Plotter Specifications Database",
+  "version": "1.0.0",
+  "description": "Especificações detalhadas de plotters HP, Canon e Epson para o All Press C++",
+  
+  "plotters": {
+    "hp": {
+      "vendor": "HP",
+      "series": [
+        {
+          "name": "DesignJet T-Series",
+          "models": [
+            {
+              "model": "DesignJet T1200",
+              "year": 2015,
+              "protocols": {
+                "primary": "HPGL2",
+                "supported": ["HPGL2", "PostScript", "PDF"],
+                "fallback": ["PostScript", "PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4", "Letter", "Legal"],
+                "max_width_mm": 1118,
+                "max_length_mm": 1600,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 600,
+                "supported": [300, 600, 1200],
+                "max_dpi": 1200
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["monochrome", "color"],
+                "ink_system": "HP 72 Ink Cartridges",
+                "color_count": 6
+              },
+              "quirks": {
+                "paper_feed_delay": "500ms",
+                "pen_warmup": true,
+                "notes": "Requer calibração de cor periódica"
+              }
+            },
+            {
+              "model": "DesignJet T2300",
+              "year": 2018,
+              "protocols": {
+                "primary": "HPGL2",
+                "supported": ["HPGL2", "PostScript", "PDF"],
+                "fallback": ["PostScript", "PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4"],
+                "max_width_mm": 1118,
+                "max_length_mm": 1600,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 600,
+                "supported": [300, 600, 1200],
+                "max_dpi": 1200
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["monochrome", "color"],
+                "ink_system": "HP 72 Ink Cartridges",
+                "color_count": 6
+              },
+              "quirks": {
+                "paper_feed_delay": "300ms",
+                "color_calibration": true,
+                "notes": "Melhor performance com HPGL2"
+              }
+            },
+            {
+              "model": "DesignJet T3500",
+              "year": 2020,
+              "protocols": {
+                "primary": "HPGL2",
+                "supported": ["HPGL2", "PostScript", "PDF"],
+                "fallback": ["PostScript", "PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4"],
+                "max_width_mm": 1118,
+                "max_length_mm": 1600,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 600,
+                "supported": [300, 600, 1200],
+                "max_dpi": 1200
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["monochrome", "color"],
+                "ink_system": "HP 72 Ink Cartridges",
+                "color_count": 6
+              },
+              "features": {
+                "high_speed_mode": true,
+                "auto_sheet_feeder": true,
+                "touchscreen": true
+              },
+              "quirks": {
+                "paper_feed_delay": "200ms",
+                "high_speed_mode": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    
+    "canon": {
+      "vendor": "Canon",
+      "series": [
+        {
+          "name": "imagePROGRAF TX Series",
+          "models": [
+            {
+              "model": "imagePROGRAF TX-3000",
+              "year": 2019,
+              "protocols": {
+                "primary": "PostScript",
+                "supported": ["PostScript", "PDF", "HPGL2"],
+                "fallback": ["PDF", "HPGL2"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4", "Letter", "Legal"],
+                "max_width_mm": 914,
+                "max_length_mm": 18000,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 600,
+                "supported": [300, 600, 1200],
+                "max_dpi": 2400
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["monochrome", "color"],
+                "ink_system": "LUCIA TD Pigment Ink",
+                "color_count": 5
+              },
+              "features": {
+                "icc_profile_support": true,
+                "color_management": "Advanced",
+                "hot_swap_ink": true
+              },
+              "quirks": {
+                "icc_profile_required": true,
+                "ultrachrome_ink_support": true,
+                "notes": "Requer perfil ICC para melhor qualidade de cor"
+              }
+            },
+            {
+              "model": "imagePROGRAF TX-4000",
+              "year": 2020,
+              "protocols": {
+                "primary": "PostScript",
+                "supported": ["PostScript", "PDF", "HPGL2"],
+                "fallback": ["PDF", "HPGL2"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4"],
+                "max_width_mm": 1118,
+                "max_length_mm": 18000,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 600,
+                "supported": [300, 600, 1200],
+                "max_dpi": 2400
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["color"],
+                "ink_system": "LUCIA PRO Pigment Ink",
+                "color_count": 11
+              },
+              "features": {
+                "lucia_pro_ink": true,
+                "color_density_sensor": true
+              },
+              "quirks": {
+                "icc_profile_required": true,
+                "lucia_pro_ink": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "imagePROGRAF PRO Series",
+          "models": [
+            {
+              "model": "imagePROGRAF PRO-6000",
+              "year": 2021,
+              "protocols": {
+                "primary": "PostScript",
+                "supported": ["PostScript", "PDF"],
+                "fallback": ["PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3"],
+                "max_width_mm": 1524,
+                "max_length_mm": 18000,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 1200,
+                "supported": [600, 1200, 2400],
+                "max_dpi": 2400
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["color"],
+                "ink_system": "LUCIA PRO 12-Color",
+                "color_count": 12
+              },
+              "features": {
+                "12_color_ink": true,
+                "professional_grade": true,
+                "advanced_color_matching": true
+              },
+              "quirks": {
+                "12_color_ink": true,
+                "professional_grade": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    
+    "epson": {
+      "vendor": "Epson",
+      "series": [
+        {
+          "name": "SureColor SC-T Series",
+          "models": [
+            {
+              "model": "SureColor T5200",
+              "year": 2018,
+              "protocols": {
+                "primary": "PostScript",
+                "supported": ["PostScript", "ESC/P", "PDF"],
+                "fallback": ["ESC/P", "PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4", "Letter"],
+                "max_width_mm": 914,
+                "max_length_mm": 15000,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 720,
+                "supported": [300, 600, 720, 1200],
+                "max_dpi": 2400
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["monochrome", "color"],
+                "ink_system": "UltraChrome XD2 Pigment Ink",
+                "color_count": 4
+              },
+              "features": {
+                "surecolor_mode": true,
+                "auto_take_up_reel": true
+              },
+              "quirks": {
+                "max_roll_width": "1118mm",
+                "surecolor_mode": true
+              }
+            },
+            {
+              "model": "SureColor T7200",
+              "year": 2019,
+              "protocols": {
+                "primary": "PostScript",
+                "supported": ["PostScript", "ESC/P", "PDF"],
+                "fallback": ["ESC/P", "PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3", "A4"],
+                "max_width_mm": 1118,
+                "max_length_mm": 15000,
+                "roll_support": true
+              },
+              "resolution": {
+                "default_dpi": 720,
+                "supported": [300, 600, 720, 1200],
+                "max_dpi": 2400
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["monochrome", "color"],
+                "ink_system": "UltraChrome XD2",
+                "color_count": 4
+              },
+              "quirks": {
+                "max_roll_width": "1118mm",
+                "ultrachrome_xd2": true
+              }
+            },
+            {
+              "model": "SureColor T7700",
+              "year": 2021,
+              "protocols": {
+                "primary": "PostScript",
+                "supported": ["PostScript", "ESC/P", "PDF"],
+                "fallback": ["ESC/P", "PDF"]
+              },
+              "media": {
+                "sizes": ["A0", "A1", "A2", "A3"],
+                "max_width_mm": 1118,
+                "max_length_mm": 15000,
+                "roll_support": true,
+                "dual_roll": true
+              },
+              "resolution": {
+                "default_dpi": 720,
+                "supported": [300, 600, 720, 1200],
+                "max_dpi": 2400
+              },
+              "colors": {
+                "type": "inkjet",
+                "modes": ["color"],
+                "ink_system": "UltraChrome XD3",
+                "color_count": 6
+              },
+              "features": {
+                "dual_roll_support": true,
+                "auto_switching": true,
+                "precision_core": true
+              },
+              "quirks": {
+                "max_roll_width": "1118mm",
+                "dual_roll_support": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  
+  "protocol_reference": {
+    "HPGL": {
+      "name": "HP Graphics Language",
+      "version": "1.0",
+      "description": "Vector-based plotter language",
+      "requires_preprocessing": true,
+      "best_for": ["CAD drawings", "Technical diagrams"]
+    },
+    "HPGL2": {
+      "name": "HP Graphics Language 2",
+      "version": "2.0",
+      "description": "Enhanced vector plotter language with raster support",
+      "requires_preprocessing": true,
+      "best_for": ["CAD drawings", "Technical diagrams", "Mixed content"]
+    },
+    "PostScript": {
+      "name": "Adobe PostScript",
+      "version": "3.0",
+      "description": "Page description language",
+      "requires_preprocessing": false,
+      "best_for": ["Documents", "Graphics", "Photos"]
+    },
+    "ESC/P": {
+      "name": "Epson Standard Code for Printers",
+      "version": "2.0",
+      "description": "Epson printer command set",
+      "requires_preprocessing": false,
+      "best_for": ["Text", "Simple graphics"]
+    },
+    "PDF": {
+      "name": "Portable Document Format",
+      "version": "1.7",
+      "description": "Universal document format",
+      "requires_preprocessing": false,
+      "best_for": ["All document types"]
+    }
+  },
+  
+  "manufacturer_links": {
+    "hp": {
+      "support": "https://www.hp.com/en/support.html",
+      "drivers": "https://support.hp.com/drivers",
+      "documentation": "https://www.hp.com/en/designjet/technical-reference"
+    },
+    "canon": {
+      "support": "https://www.canon.com/en/business/",
+      "drivers": "https://www.canon.com/support",
+      "documentation": "https://www.canon.com/imageprograf/technical"
+    },
+    "epson": {
+      "support": "https://epson.com/en/support",
+      "drivers": "https://epson.com/drivers",
+      "documentation": "https://epson.com/surecolor/technical"
+    }
+  }
+}
+

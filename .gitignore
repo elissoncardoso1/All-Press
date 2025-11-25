@@ -1,0 +1,87 @@
+# Build artifacts
+build/
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Conan
+conan.lock
+conanbuildinfo.*
+conaninfo.txt
+graph_info.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+all_press.log
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+
+# Documentation
+docs/html/
+docs/latex/
+
+# Package managers
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Test coverage
+*.gcov
+*.gcda
+*.gcno
+coverage/
+
+# Cache directories
+.cache/
+*.cache
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Config files with sensitive data
+config/*.conf
+!config/*.example.conf

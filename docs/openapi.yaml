@@ -1,0 +1,517 @@
+openapi: 3.0.3
+info:
+  title: All Press C++ API
+  description: High-Performance Print Management System REST API
+  version: 1.1.0
+  contact:
+    name: All Press Support
+    email: support@allpress.com
+
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.allpress.com/api
+    description: Production server
+
+tags:
+  - name: Printers
+    description: Printer management operations
+  - name: Jobs
+    description: Print job management
+  - name: System
+    description: System configuration and status
+  - name: Plotters
+    description: Plotter-specific operations
+
+paths:
+  /printers:
+    get:
+      tags:
+        - Printers
+      summary: List all printers
+      description: Returns a list of all discovered printers
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Printer'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    post:
+      tags:
+        - Printers
+      summary: Discover printers
+      description: Triggers a new printer discovery process
+      responses:
+        '200':
+          description: Discovery started
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Printer'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /printers/{id}:
+    get:
+      tags:
+        - Printers
+      summary: Get printer by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Printer details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Printer'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /jobs:
+    get:
+      tags:
+        - Jobs
+      summary: List all jobs
+      description: Returns a list of all print jobs
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrintJob'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    post:
+      tags:
+        - Jobs
+      summary: Create a new print job
+      description: Creates a new print job from uploaded file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                printer_id:
+                  type: string
+                options:
+                  type: string
+                  description: JSON string with print options
+      responses:
+        '200':
+          description: Job created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintJob'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /jobs/{id}:
+    get:
+      tags:
+        - Jobs
+      summary: Get job by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    post:
+      tags:
+        - Jobs
+      summary: Cancel a job
+      description: Cancels a running or pending print job
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /system/status:
+    get:
+      tags:
+        - System
+      summary: Get system status
+      description: Returns the current system status and version
+      responses:
+        '200':
+          description: System status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatus'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /system/stats:
+    get:
+      tags:
+        - System
+      summary: Get system statistics
+      description: Returns statistics about printers, jobs, and system usage
+      responses:
+        '200':
+          description: System statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStats'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /system/metrics:
+    get:
+      tags:
+        - System
+      summary: Get system metrics
+      description: Returns system resource usage metrics
+      responses:
+        '200':
+          description: System metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemMetrics'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /system/settings:
+    get:
+      tags:
+        - System
+      summary: Get system settings
+      description: Returns all system configuration settings
+      responses:
+        '200':
+          description: System settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    post:
+      tags:
+        - System
+      summary: Update system settings
+      description: Updates system configuration settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '200':
+          description: Settings saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Printer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique printer identifier
+        name:
+          type: string
+          description: Printer name
+        status:
+          type: string
+          enum: [online, offline]
+        type:
+          type: string
+          description: Printer type
+        manufacturer:
+          type: string
+        model:
+          type: string
+        location:
+          type: string
+        uri:
+          type: string
+          description: Printer URI
+        capabilities:
+          type: object
+          properties:
+            supportedFormats:
+              type: array
+              items:
+                type: string
+            colorSupported:
+              type: boolean
+            duplexSupported:
+              type: boolean
+            maxPaperSize:
+              type: string
+            resolutions:
+              type: array
+              items:
+                type: integer
+            paperSizes:
+              type: array
+              items:
+                type: string
+        currentJobs:
+          type: integer
+        totalJobsProcessed:
+          type: integer
+
+    PrintJob:
+      type: object
+      properties:
+        id:
+          type: string
+        printerId:
+          type: string
+        fileName:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, completed, failed, cancelled]
+        progress:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        createdAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        error:
+          type: string
+        options:
+          $ref: '#/components/schemas/PrintOptions'
+
+    PrintOptions:
+      type: object
+      properties:
+        copies:
+          type: integer
+          minimum: 1
+          default: 1
+        colorMode:
+          type: string
+          enum: [color, grayscale, monochrome, auto]
+        duplex:
+          type: string
+          enum: [none, long-edge, short-edge]
+        paperSize:
+          type: string
+          enum: [A4, Letter, Legal, A3]
+        quality:
+          type: string
+          enum: [draft, normal, high]
+
+    SystemStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [operational, degraded, down]
+        uptime:
+          type: integer
+          description: Uptime in seconds
+        version:
+          type: string
+
+    SystemStats:
+      type: object
+      properties:
+        printersOnline:
+          type: integer
+        printersTotal:
+          type: integer
+        jobsPending:
+          type: integer
+        jobsProcessing:
+          type: integer
+        jobsCompleted:
+          type: integer
+        jobsFailed:
+          type: integer
+        pagesTotal:
+          type: integer
+        pagesToday:
+          type: integer
+        estimatedCost:
+          type: number
+          format: float
+
+    SystemMetrics:
+      type: object
+      properties:
+        cpuUsage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        memoryUsage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        diskUsage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        temperature:
+          type: number
+          format: float
+
+    Settings:
+      type: object
+      properties:
+        server:
+          type: object
+          properties:
+            port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+            ws_port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+        queue:
+          type: object
+          properties:
+            max_workers:
+              type: integer
+              minimum: 1
+        printer:
+          type: object
+          properties:
+            auto_discover:
+              type: boolean
+            discover_interval:
+              type: integer
+              minimum: 60
+        color:
+          type: object
+          properties:
+            default_input_profile:
+              type: string
+            enable_calibration:
+              type: boolean
+        database:
+          type: object
+          properties:
+            path:
+              type: string
+        logging:
+          type: object
+          properties:
+            level:
+              type: string
+              enum: [DEBUG, INFO, WARNING, ERROR]
+            file:
+              type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        success:
+          type: boolean
+          default: false
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+

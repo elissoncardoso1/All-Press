@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Impressão - All Press C++</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #3b82f6;
+            background: #f0f9ff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        .status-online { color: #10b981; font-weight: bold; }
+        .status-offline { color: #ef4444; font-weight: bold; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f3f4f6;
+            font-weight: bold;
+        }
+        .check { color: #10b981; }
+        .cross { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🖨️ Teste de Impressão</h1>
+        <h2>All Press C++ - Sistema de Gerenciamento de Impressão</h2>
+        <p><strong>Data:</strong> 18/11/2025 00:35:00</p>
+    </div>
+
+    <div class="section">
+        <h3>📋 Informações do Sistema</h3>
+        <ul>
+            <li><strong>Versão:</strong> v1.0.0</li>
+            <li><strong>Backend:</strong> C++ com REST API (Porta 8000)</li>
+            <li><strong>Frontend:</strong> React + TypeScript + Vite</li>
+            <li><strong>Database:</strong> SQLite</li>
+            <li><strong>Print Manager:</strong> CUPS Integration</li>
+            <li><strong>File Processor:</strong> Multi-format converter (16 formats)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>🖨️ Impressoras Detectadas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Impressora</th>
+                    <th>Status</th>
+                    <th>Conexão</th>
+                    <th>Pronta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Canon G3010 Series</td>
+                    <td class="status-offline">Offline</td>
+                    <td>USB</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>Canon G3010 Series (WiFi)</td>
+                    <td class="status-online">Online</td>
+                    <td>Network (Bonjour)</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>EPSON L395 Series</td>
+                    <td class="status-offline">Offline</td>
+                    <td>Network</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>EPSON L4260 Series</td>
+                    <td class="status-offline">Offline</td>
+                    <td>Network</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>Kyocera ECOSYS M3040idn</td>
+                    <td class="status-offline">Offline</td>
+                    <td>Network</td>
+                    <td>❌</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>📄 Formatos Suportados (16 formatos)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Extensão</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Documentos</td>
+                    <td>.pdf</td>
+                    <td>Portable Document Format</td>
+                    <td class="check">✅</td>
+                </tr>
+                <tr>
+                    <td>Microsoft Word</td>
+                    <td>.docx, .doc</td>
+                    <td>Word 2007+, Word 97-2003</td>
+                    <td class="check">✅</td>
+                </tr>
+                <tr>
+                    <td>Microsoft Excel</td>
+                    <td>.xlsx, .xls</td>
+                    <td>Excel 2007+, Excel 97-2003</td>
+                    <td class="check">✅</td>
+                </tr>
+                <tr>
+                    <td>Microsoft PowerPoint</td>
+                    <td>.pptx, .ppt</td>
+                    <td>PowerPoint 2007+, PowerPoint 97-2003</td>
+                    <td class="check">✅</td>
+                </tr>
+                <tr>
+                    <td>CAD</td>
+                    <td>.dwg, .dxf</td>
+                    <td>AutoCAD Drawing, AutoCAD DXF</td>
+                    <td class="check">✅</td>
+                </tr>
+                <tr>
+                    <td>Design/Vetor</td>
+                    <td>.svg, .ai, .cdr, .eps</td>
+                    <td>SVG, Illustrator, CorelDRAW, EPS</td>
+                    <td class="check">✅</td>
+                </tr>
+                <tr>
+                    <td>Imagens</td>
+                    <td>.jpg, .png</td>
+                    <td>JPEG, Portable Network Graphics</td>
+                    <td class="check">✅</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>🧪 Teste de Funcionalidades</h3>
+        <ul>
+            <li><span class="check">✅</span> Renderização de HTML</li>
+            <li><span class="check">✅</span> Formatação CSS</li>
+            <li><span class="check">✅</span> Tabelas e Layout</li>
+            <li><span class="check">✅</span> Cores e Estilos</li>
+            <li><span class="check">✅</span> Caracteres Especiais (ç, ã, ó, etc.)</li>
+            <li><span class="check">✅</span> Estrutura de Documento</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>📊 Resultado Esperado</h3>
+        <p>Este documento HTML deve ser:</p>
+        <ol>
+            <li>Processado pelo conversor de arquivos do All Press C++</li>
+            <li>Convertido para PDF mantendo formatação</li>
+            <li>Enviado para a impressora selecionada via CUPS</li>
+            <li>Impresso com layout, cores e texto preservados</li>
+        </ol>
+    </div>
+
+    <div class="footer">
+        <p><strong>Gerado pelo script de depuração - All Press C++</strong></p>
+        <p>Sistema de Gerenciamento de Impressão de Alta Performance</p>
+        <p>Página 1 de 1 | Versão do Teste: 1.0</p>
+    </div>
+</body>
+</html>

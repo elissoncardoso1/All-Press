@@ -1,0 +1,11 @@
+[requires]
+boost/1.83.0
+openssl/1.1.1t
+nlohmann_json/3.11.2
+spdlog/1.12.0
+crowcpp-crow/1.0+5
+gtest/1.14.0
+
+[generators]
+CMakeDeps
+CMakeToolchain

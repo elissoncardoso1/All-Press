@@ -1,0 +1,50 @@
+Documento de Teste - All Press C++
+=====================================
+
+Data de Geração: 18/11/2025 00:35:00
+Versão do Sistema: v1.0.0
+
+CONTEÚDO DO TESTE
+-----------------
+
+Este documento foi criado para testar o sistema de impressão
+All Press C++ com dados reais, sem mocks ou simulações.
+
+INFORMAÇÕES DO SISTEMA:
+- Backend: C++ com REST API na porta 8000
+- Frontend: React + TypeScript + Vite
+- Database: SQLite
+- Print Manager: CUPS integration
+
+FORMATOS SUPORTADOS (16 formatos):
+✅ PDF - Documentos PDF
+✅ DOCX - Microsoft Word 2007+
+✅ DOC - Microsoft Word 97-2003
+✅ XLSX - Microsoft Excel 2007+
+✅ XLS - Microsoft Excel 97-2003
+✅ PPTX - Microsoft PowerPoint 2007+
+✅ PPT - Microsoft PowerPoint 97-2003
+✅ DWG - AutoCAD Drawing
+✅ DXF - AutoCAD DXF
+✅ SVG - Scalable Vector Graphics
+✅ AI - Adobe Illustrator
+✅ PSD - Adobe Photoshop
+✅ CDR - CorelDRAW
+✅ EPS - Encapsulated PostScript
+✅ JPG - JPEG Image
+✅ PNG - Portable Network Graphics
+
+IMPRESSORAS DETECTADAS:
+1. Canon G3010 Series (USB)
+2. Canon G3010 Series (WiFi) - ONLINE
+3. EPSON L395 Series
+4. EPSON L4260 Series
+5. Kyocera ECOSYS M3040idn (2)
+
+RESULTADO ESPERADO:
+Este documento deve ser processado e impresso corretamente,
+mantendo formatação, caracteres especiais e layout.
+
+---
+Fim do documento de teste
+Gerado pelo script de debug do All Press C++
